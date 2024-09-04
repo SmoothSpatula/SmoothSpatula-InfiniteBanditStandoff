@@ -60,17 +60,17 @@ __initialize = function()
     Callback.add("onStageStart", "InifiniteBanditStandoff-getPlayers", getPlayers)
     
     gm.post_code_execute(function(self, other, code, result, flags)
-        if code.name:match("oInit_Draw_7") and params['IBS_enabled'] then
-            if not players then return end
+        if code.name:match("oInit_Draw_7") and params['IBS_enabled'] and players then
 
             for _, player in ipairs(players) do
-                if not player.buff_stack or player.buff_stack[37] == 0 then return end
+                if not player.dead and player.buff_stack and player.buff_stack[37] ~= 0 then
     
-                local colour = skull_colours[gm.clamp(player.buff_stack[37], 1, 5)]
+                    local colour = skull_colours[gm.clamp(player.buff_stack[37], 1, 5)]
     
-                gm.draw_set_font(25)
-                gm.draw_set_halign(0)
-                gm.draw_text_colour(player.x + 8, player.y - 42, player.buff_stack[37], colour, colour, colour, colour, 1)
+                    gm.draw_set_font(25)
+                    gm.draw_set_halign(0)
+                    gm.draw_text_colour(player.x + 8, player.y - 42, player.buff_stack[37], colour, colour, colour, colour, 1)
+                end
             end
         end
     end)
