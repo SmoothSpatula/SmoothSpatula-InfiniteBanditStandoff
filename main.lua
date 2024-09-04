@@ -52,7 +52,7 @@ local getPlayers = function()
 end
 
 __initialize = function()
-    skulls_sprite = Resources.sprite_load(path.combine(_ENV["!plugins_mod_folder_path"], "Sprites", "skulls.png"), 5, false, false, 13, 11)
+    skulls_sprite = Resources.sprite_load(path.combine(_ENV["!plugins_mod_folder_path"], "skulls.png"), 5, false, false, 13, 11)
     local banditSkull = gm.variable_global_get("class_buff")[37]
     gm.array_set(banditSkull, 3, skulls_sprite)
     gm.array_set(banditSkull, 9, -1)
