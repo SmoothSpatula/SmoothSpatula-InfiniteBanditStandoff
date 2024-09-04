@@ -16,7 +16,7 @@ mods.on_all_mods_loaded(function()
     for _, m in pairs(mods) do
         if type(m) == "table" and m.RoRR_Modding_Toolkit then
             Callback = m.Callback
-            Player = m.Player
+            Instance = m.Instance
             Resources = m.Resources
             break
         end
@@ -46,9 +46,9 @@ local skull_colours = {
 
 -- ========== Init/Callback ==========
 
-local player = nil
+local players = nil
 local getPlayers = function()
-    player = Player.get_client()
+    players = Instance.find_all(gm.constants.oP)
 end
 
 __initialize = function()
@@ -61,13 +61,17 @@ __initialize = function()
     
     gm.post_code_execute(function(self, other, code, result, flags)
         if code.name:match("oInit_Draw_7") and params['IBS_enabled'] then
-            if not player or not player.buff_stack or player.buff_stack[37] == 0 then return end
+            if not players then return end
+
+            for _, player in ipairs(players) do
+                if not player.buff_stack or player.buff_stack[37] == 0 then return end
     
-            local colour = skull_colours[gm.clamp(player.buff_stack[37], 1, 5)]
+                local colour = skull_colours[gm.clamp(player.buff_stack[37], 1, 5)]
     
-            gm.draw_set_font(25)
-            gm.draw_set_halign(0)
-            gm.draw_text_colour(player.x + 8, player.y - 42, player.buff_stack[37], colour, colour, colour, colour, 1)
+                gm.draw_set_font(25)
+                gm.draw_set_halign(0)
+                gm.draw_text_colour(player.x + 8, player.y - 42, player.buff_stack[37], colour, colour, colour, colour, 1)
+            end
         end
     end)
 end
