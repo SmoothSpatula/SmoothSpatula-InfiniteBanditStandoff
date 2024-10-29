@@ -1,4 +1,4 @@
--- Infinite Bandit Standoff v1.0.0
+-- Infinite Bandit Standoff v1.0.1
 -- SmoothSpatula
 
 log.info("Successfully loaded ".._ENV["!guid"]..".")
@@ -12,16 +12,7 @@ mods.on_all_mods_loaded(function() for k, v in pairs(mods) do if type(v) == "tab
     params = Toml.config_update(_ENV["!guid"], params) -- Load Save
 end)
 
-mods.on_all_mods_loaded(function()
-    for _, m in pairs(mods) do
-        if type(m) == "table" and m.RoRR_Modding_Toolkit then
-            Callback = m.Callback
-            Instance = m.Instance
-            Resources = m.Resources
-            break
-        end
-    end
-end)
+mods["RoRRModdingToolkit-RoRR_Modding_Toolkit"].auto()
 
 -- ========== ImGui ==========
 
@@ -51,17 +42,16 @@ local getPlayers = function()
     players = Instance.find_all(gm.constants.oP)
 end
 
-__initialize = function()
-    skulls_sprite = Resources.sprite_load(path.combine(_ENV["!plugins_mod_folder_path"], "skulls.png"), 5, false, false, 13, 11)
+init = function()
+    skulls_sprite = Resources.sprite_load("smsp", "skull", path.combine(_ENV["!plugins_mod_folder_path"], "skulls.png"), 5, 13, 11)
     local banditSkull = gm.variable_global_get("class_buff")[37]
     gm.array_set(banditSkull, 3, skulls_sprite)
     gm.array_set(banditSkull, 9, -1)
 
     Callback.add("onStageStart", "InifiniteBanditStandoff-getPlayers", getPlayers)
     
-    gm.post_code_execute(function(self, other, code, result, flags)
-        if code.name:match("oInit_Draw_7") and params['IBS_enabled'] and players then
-
+    gm.post_code_execute("gml_Object_oInit_Draw_73", function(self, other)
+        if params['IBS_enabled'] and players then
             for _, player in ipairs(players) do
                 if not player.dead and player.buff_stack and player.buff_stack[37] ~= 0 then
     
@@ -75,3 +65,7 @@ __initialize = function()
         end
     end)
 end
+
+Initialize(init)
+if hot_reload then init() end
+hot_reload = true
