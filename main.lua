@@ -12,7 +12,7 @@ mods.on_all_mods_loaded(function() for k, v in pairs(mods) do if type(v) == "tab
     params = Toml.config_update(_ENV["!guid"], params) -- Load Save
 end)
 
-mods["RoRRModdingToolkit-RoRR_Modding_Toolkit"].auto()
+mods["RoRRModdingToolkit-RoRR_Modding_Toolkit"].auto(true)
 
 -- ========== ImGui ==========
 
